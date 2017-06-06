@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
+<title>js获得光标所在的文本框(text/textarea)中的位置</title> 
+<script type="text/javascript"> 
+function getPosition(obj){ 
+var result = 0; 
+if(obj.selectionStart){ //IE以外 
+result = obj.selectionStart 
+}else{ //IE 
+var rng; 
+if(obj.tagName == "textarea"){ //TEXTAREA 
+rng = event.srcElement.createTextRange(); 
+rng.moveToPoint(event.x,event.y); 
+}else{ //Text 
+rng = document.selection.createRange(); 
+} 
+rng.moveStart("character",-event.srcElement.value.length); 
+result = rng.text.length; 
+} 
+return result; 
+} 
+function getValue(obj){ 
+var pos = getPosition(obj); 
+alert(obj.value.substr(0,pos)+"[输入内容]"+obj.value.substr(pos,obj.value.length)); 
+} 
+</script> 
+</head> 
+<body> 
+<input type="text" value="HELLO jb51" onmouseup="getValue(this)" style="display:block"> 
+<textarea rows="6" cols="60" onmouseup="getValue(this)">jb51 HELLO!</textarea> 
+</body> 
+</html>
+

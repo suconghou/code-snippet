@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		.wrapper{
+			width: 90px;
+			height: 90px;
+			border-radius: 50%;
+			background: rgba(100,100,100,0.5);
+			position: relative;
+			overflow: hidden;
+		}
+		.inner{
+			background: #f00;
+			width: 240px;
+			height: 190px;
+			position: absolute;
+			top: 0;
+			left: 50px;
+			border-radius: 50%;
+			animation: spin 6s linear 0s infinite;
+			-webkit-animation: spin 6s linear 0s infinite;
+		}
+		.wrapper2{
+			width: 90px;
+			height: 90px;
+			border-radius: 50%;
+			background: rgba(100,100,100,0.5);
+			position: relative;
+			overflow: hidden;
+		}
+		.inner2{
+			background: #f00;
+			width: 240px;
+			height: 190px;
+			position: absolute;
+			top: 0;
+			left: 50px;
+			border-radius: 50%;
+		}
+		.wrapper3{
+			width: 90px;
+			height: 90px;
+			border-radius: 50%;
+			background: rgba(100,100,100,0.5);
+			position: relative;
+			overflow: hidden;
+
+		}
+		.inner3{
+			background: #f00;
+			width: 240px;
+			height: 190px;
+			position: absolute;
+			top: 0;
+			left: 50px;
+			border-radius: 50%;
+			transition: all 2.8s ease;
+			-webkit-transition: all 2.8s ease;
+		}
+		.inner3:hover{
+			-webkit-transform: rotate(360deg);
+			transform: rotate(360deg);
+		}
+		.wrapper4{
+			width: 90px;
+			height: 90px;
+			border-radius: 50%;
+			background: rgba(100,100,100,0.5);
+			position: relative;
+			overflow: hidden;
+			transform: translateX(0);
+			-webkit-transform: translateX(0);
+		}
+		.inner4{
+			background: #f00;
+			width: 240px;
+			height: 190px;
+			position: absolute;
+			top: 0;
+			left: 50px;
+			border-radius: 50%;
+			animation: spin 6s linear 0s infinite;
+			-webkit-animation: spin 6s linear 0s infinite;
+		}
+
+		@keyframes spin {
+			from {
+				-webkit-transform: rotate(0deg);
+				transform: rotate(0deg);
+			}
+			to {
+				-webkit-transform: rotate(360deg);
+				transform: rotate(360deg);
+			}
+		}
+
+		@-webkit-keyframes spin {
+			from {
+				-webkit-transform: rotate(0deg);
+				transform: rotate(0deg);
+			}
+			to {
+				-webkit-transform: rotate(360deg);
+				transform: rotate(360deg);
+			}
+		}
+	</style>
+</head>
+<body>
+
+	<p>例子1,safari8 safari10下, border-radius无效</p>
+	<div class="wrapper">
+		<div class="inner"></div>
+	</div>
+	<hr>
+	<p>例子2,不使用keyframe的子元素在所有浏览器正常</p>
+	<div class="wrapper2">
+		<div class="inner2"></div>
+	</div>
+	<hr>
+	<p>例子3,使用transition过渡的子元素,请鼠标悬浮到红色区域,safari 8-10 BUG复现</p>
+	<div class="wrapper3">
+		<div class="inner3"></div>
+	</div>
+	<hr>
+	<p>例子4,使用transform作用于父元素,safari10下BUG消失  使用 rotate(0deg) /  translateX(0) 等都可以</p>
+	<p>safari8下仍然无效,需要注意的是safari8只认识-webkit-前缀的css3</p>
+	<div class="wrapper4">
+		<div class="inner4"></div>
+	</div>
+	<hr>
+
+
+
+
+</body>
+</html>

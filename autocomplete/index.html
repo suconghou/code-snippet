@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		#aa{
+			outline: none;
+			width: 290px;
+			resize: none;
+		}
+		.autocomplete{
+			width: 200px;
+			background: #99a;
+			font-size: 14px;
+		}
+		.autocomplete-selectdown{
+			margin: 0;
+			padding: 0;
+		}
+		.autocomplete li {
+			display: block;
+			width: 100%;
+			color: #fff;
+			padding: 4px 0;
+			cursor: pointer;
+		}
+		.autocomplete li:hover,.autocomplete li.hover {
+			background: #88f;
+		}
+
+	</style>
+</head>
+<body>
+<div>
+
+	<textarea id="aa"></textarea>
+
+</div>
+<footer>
+		<script type="text/javascript" src="http://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+		<script type="text/javascript" src="/autocomplete.js"></script>
+		<script type="text/javascript">
+			$('#aa').autocomplete(
+			{
+				source:["hello","hi","youyou","Good","sucongohu","name","ligang"],
+				casesenstive:false,
+			});
+		</script>
+</footer>
+</body>
+</html>

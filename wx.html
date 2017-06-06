@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv=X-UA-Compatible content='IE=edge,chrome=1'>
+	<meta name='renderer' content='webkit'>
+	<meta name='viewport' content='width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no'>
+	<title>横竖屏检测</title>
+	<style type="text/css">
+	/*landscape 是代表横屏,portrait代表竖屏*/
+	@media all and (orientation : landscape) {
+		.csslandscape{
+			display: block;
+		}
+		.cssportrait{
+			display: none;
+		}
+	}
+	@media all and (orientation : portrait) {
+		.csslandscape{
+			display: none;
+		}
+		.cssportrait{
+			display: block;
+		}
+	}
+
+	.portrait .jsportrait{
+	    display: block;
+	}
+	.portrait .jslandscape{
+	    display: none;
+	}
+
+	.landscape .jslandscape{
+	    display: block;
+	}
+
+	.landscape .jsportrait{
+	    display: none;
+	}
+	input{
+		border: 1px solid #ddd;
+		height: 26px;
+	}
+	div{
+		width: 180px;
+		height: 100px;
+		margin: 15px;
+		font-size: 20px;
+	}
+	</style>
+</head>
+<body>
+	<div>
+		<input type="text">
+	</div>
+	<div class="jslandscape">
+		js检测为横屏
+	</div>
+	<div class="jsportrait">
+		js检测为竖屏
+	</div>
+	<div class="csslandscape">
+		css检测为横屏
+	</div>
+	<div class="cssportrait">
+		css检测为竖屏
+	</div>
+	<div id="stat">
+	</div>
+	<div>
+		<input type="text">
+	</div>
+	<div>
+		<input type="text">
+	</div>
+	<script type="text/javascript">
+		(function(w)
+		{
+		    var supportOrientation = (typeof w.orientation === 'number' && typeof w.onorientationchange === 'object');
+		    w.supportOrientation=supportOrientation;
+		    var init = function()
+		    {
+		        var htmlNode = document.body.parentNode, orientation;
+		        var updateOrientation = function()
+		        {
+		            if(supportOrientation)
+		            {
+		                orientation = w.orientation;
+		                switch(orientation)
+		                {
+		                    case 90:
+		                    case -90:
+		                        orientation = 'landscape';
+		                        break;
+		                    default:
+		                        orientation = 'portrait';
+		                        break;
+		                }
+		            }
+		            else
+		            {
+		                orientation = (w.innerWidth > w.innerHeight) ? 'landscape' : 'portrait';
+		            }
+		            htmlNode.setAttribute('class',orientation);
+		        };
+		        if(supportOrientation)
+		        {
+		            w.addEventListener('orientationchange',updateOrientation,false);
+		        }
+		        else
+		        {
+		            //监听resize事件
+		            w.addEventListener('resize',updateOrientation,false);
+		        }
+		        updateOrientation();
+		    };
+		    w.addEventListener('DOMContentLoaded',init,false);
+		})(window);
+		document.getElementById('stat').innerHTML=window.supportOrientation?'支持js原生横竖屏判断':'不支持js原生横竖屏判断,js判断回滚到根据宽高比判断';
+	</script>
+</body>
+</html>

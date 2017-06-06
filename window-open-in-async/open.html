@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+
+	<p>同步中执行 window.open</p>
+	<button onclick="open_1">非异步调用</button>
+	<hr>
+	<p>在异步中调用(setTimeout模拟异步)</p>
+	<button onclick="open_2">异步调用</button>
+	<hr>
+
+<script type="text/javascript">
+
+// 注意不能命名为open 函数,否则会与window.open冲突
+
+function open_1()
+{
+	window.open('https://www.baidu.com');
+}
+
+function open_2()
+{
+	setTimeout(function(){
+		window.open('https://www.baidu.com');
+	},50);
+}
+
+
+
+</script>
+</body>
+</html>

@@ -26,11 +26,16 @@ func main() {
 		return
 	}
 	var i int
+	var errtimes int
 	nextURL := func() string {
 		i++
 		if i%5 == 0 {
 			u, err := getM3u8URL(id)
 			if err != nil {
+				errtimes++
+				if errtimes > 5 {
+					return ""
+				}
 				return url
 			}
 			url = u

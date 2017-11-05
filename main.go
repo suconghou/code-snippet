@@ -11,11 +11,13 @@ import (
 	"github.com/suconghou/libm3u8"
 )
 
-type resJson struct {
+// Data  struct {
+// 	Hls_url string
+// }
+
+type resJSON struct {
 	Error int
-	Data  struct {
-		Hls_url string
-	}
+	Data  interface{}
 }
 
 func main() {
@@ -58,13 +60,16 @@ func getM3u8URL(id string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	var ret resJson
+	var ret resJSON
 	err = json.Unmarshal(bodyByte, &ret)
 	if err != nil {
 		return "", err
 	}
-	if ret.Data.Hls_url == "" {
-		return "", fmt.Errorf("user is offline")
+	if ret.Error == 0 {
+		data := ret.Data.(map[string]interface{})
+		if data["hls_url"] != nil {
+			return data["hls_url"].(string), nil
+		}
 	}
-	return ret.Data.Hls_url, nil
+	return "", fmt.Errorf(ret.Data.(string))
 }

@@ -24,7 +24,7 @@ func main() {
 	id := os.Args[1]
 	url, err := getM3u8URL(id)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		return
 	}
 	var i int
@@ -46,7 +46,11 @@ func main() {
 		return url
 	}
 	m, err := libm3u8.NewFromURL(url, nextURL)
-	io.Copy(os.Stdout, m.Play())
+	if err == nil {
+		io.Copy(os.Stdout, m.Play())
+	} else {
+		fmt.Fprintln(os.Stderr, err)
+	}
 }
 
 func getM3u8URL(id string) (string, error) {

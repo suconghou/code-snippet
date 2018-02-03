@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.wrapper{
+			width: 1200px;
+			margin: 20px auto;
+		}
+		.demo{
+			position: relative;
+		    margin: 0px auto;
+		    padding: 0px;
+		    width: 600px;
+		    height: 400px;
+		    overflow: hidden;
+		}
+		.content{
+		    background-image: url("http://utatti.github.io/perfect-scrollbar/azusa.jpg");
+		    width: 1280px;
+		    height: 720px;
+		}
+	</style>
+
+</head>
+<body>
+	
+	<div class="wrapper">
+		<div class="demo">
+			<div class="content"></div>
+		</div>
+	</div>
+	<script>
+
+		let a = document.querySelector('.demo');
+		let b = document.querySelector('.content');
+		a.addEventListener('scroll',(e)=>{
+			e.preventDefault();
+			console.log(e);
+		},false);
+
+	</script>
+</body>
+</html>

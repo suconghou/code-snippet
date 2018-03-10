@@ -31,12 +31,8 @@ func playVideo(vid string) {
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
-	m, err := libm3u8.NewFromURL(url, nil)
-	if err == nil {
-		io.Copy(os.Stdout, m.Play())
-	} else {
-		fmt.Fprintln(os.Stderr, err)
-	}
+	m := libm3u8.NewFromURL(func() string { return url })
+	io.Copy(os.Stdout, m.Play())
 }
 
 func playLive(id string) {
@@ -63,12 +59,8 @@ func playLive(id string) {
 		}
 		return url
 	}
-	m, err := libm3u8.NewFromURL(url, nextURL)
-	if err == nil {
-		io.Copy(os.Stdout, m.Play())
-	} else {
-		fmt.Fprintln(os.Stderr, err)
-	}
+	m := libm3u8.NewFromURL(nextURL)
+	io.Copy(os.Stdout, m.Play())
 }
 
 func getM3u8URL(id string) (string, error) {

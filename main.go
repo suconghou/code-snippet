@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -17,6 +18,11 @@ type resJSON struct {
 }
 
 func main() {
+	if len(os.Args) <= 1 {
+		m := libm3u8.NewReader(bufio.NewScanner(os.Stdin))
+		io.Copy(os.Stdout, m)
+		return
+	}
 	id := os.Args[1]
 	if len(id) > 12 {
 		playVideo(id)

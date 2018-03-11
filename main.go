@@ -51,15 +51,16 @@ func playLive(id string) {
 	var errtimes int
 	nextURL := func() string {
 		i++
-		if i%5 == 0 {
+		if i%3 == 0 {
 			u, err := getM3u8URL(id)
 			if err != nil {
 				errtimes++
-				if errtimes > 5 {
+				if errtimes > 3 {
 					return ""
 				}
 				return url
 			}
+			errtimes = 0
 			url = u
 			return u
 		}

@@ -6,10 +6,17 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/suconghou/libm3u8"
+)
+
+var (
+	client = &http.Client{Timeout: time.Duration(5) * time.Second}
+	mlog   = log.New(os.Stderr, "", log.Lshortfile)
 )
 
 type resJSON struct {
@@ -20,7 +27,8 @@ type resJSON struct {
 func main() {
 	if len(os.Args) <= 1 {
 		m := libm3u8.NewReader(bufio.NewScanner(os.Stdin))
-		io.Copy(os.Stdout, m)
+		_, err := io.Copy(os.Stdout, m)
+		pe(err)
 		return
 	}
 	id := os.Args[1]
@@ -34,17 +42,23 @@ func main() {
 func playVideo(vid string) {
 	url, err := getVideoM3U8URL(vid)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		mlog.Print(err)
 		return
 	}
 	m := libm3u8.NewFromURL(func() string { return url })
-	io.Copy(os.Stdout, m.Play())
+	if len(os.Args) > 2 {
+		_, err = io.Copy(os.Stdout, m.PlayList())
+		pe(err)
+		return
+	}
+	_, err = io.Copy(os.Stdout, m.Play())
+	pe(err)
 }
 
 func playLive(id string) {
 	url, err := getM3u8URL(id)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		mlog.Print(err)
 		return
 	}
 	var i int
@@ -67,12 +81,18 @@ func playLive(id string) {
 		return url
 	}
 	m := libm3u8.NewFromURL(nextURL)
-	io.Copy(os.Stdout, m.Play())
+	if len(os.Args) > 2 {
+		_, err = io.Copy(os.Stdout, m.PlayList())
+		pe(err)
+		return
+	}
+	_, err = io.Copy(os.Stdout, m.Play())
+	pe(err)
 }
 
 func getM3u8URL(id string) (string, error) {
 	u := fmt.Sprintf("https://m.douyu.com/html5/live?roomId=%s", id)
-	resp, err := http.Get(u)
+	resp, err := client.Get(u)
 	if err != nil {
 		return "", err
 	}
@@ -97,7 +117,7 @@ func getM3u8URL(id string) (string, error) {
 
 func getVideoM3U8URL(vid string) (string, error) {
 	u := fmt.Sprintf("https://vmobile.douyu.com/video/getInfo?vid=%s", vid)
-	resp, err := http.Get(u)
+	resp, err := client.Get(u)
 	if err != nil {
 		return "", err
 	}
@@ -118,4 +138,10 @@ func getVideoM3U8URL(vid string) (string, error) {
 		}
 	}
 	return "", fmt.Errorf(ret.Data.(string))
+}
+
+func pe(err error) {
+	if err != nil {
+		mlog.Print(err)
+	}
 }

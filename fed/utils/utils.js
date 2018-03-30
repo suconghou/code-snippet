@@ -99,6 +99,29 @@ export const getKValue = (...args) => {
     return obj;
 }
 
+export const byteFormat = (size)=>{
+    var name=['B','KB','MB','GB','TB','PB','EB','ZB','YB'];
+    var pos=0;
+    while(size>=1204) {
+        size/=1024;
+        pos++;
+    }
+    return size.toFixed(2)+" "+name[pos];
+}
+
+export const timeBefore = (t)=>{
+    var sec=[31536000,2592000,604800,86400,3600,60,1];
+    var ext=['年','个月','星期','天','小时','分钟','秒'];
+    for(let i in sec)
+    {
+        const x=Math.floor(t/sec[i]);
+        if(x!=0)
+        {
+            return `${x}${ext[i]}前`;
+        }
+    }
+}
+
 let deepClone=function(targetObj,sourceObj){
     for(let i in sourceObj){
         if(typeof sourceObj[i]==="object"){

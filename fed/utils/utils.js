@@ -122,18 +122,167 @@ export const timeBefore = (t)=>{
     }
 }
 
-let deepClone=function(targetObj,sourceObj){
-    for(let i in sourceObj){
-        if(typeof sourceObj[i]==="object"){
-            targetObj[i]=(Array.isArray(sourceObj[i])?[]:{});
-            deepClone(targetObj[i],sourceObj[i])
-        }else{
-            targetObj[i]=sourceObj[i]
+
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
+
+
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+function uuidv4() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  )
+}
+
+/* deep clone 的 几点注意  
+1. 处理原型上添加的属性不能被clone, 需使用 hasOwnProperty
+2. 处理null,null被clone后不能变成{}
+3. 处理array与object,类型不能变
+4. 处理regexp, 注意：JSON.parse(JSON.stringify()) 不能处理 undefined ， regexp 对象 ，和函数，
+*/
+
+
+
+function clone(src) {
+    var ret=(src instanceof Array ? [] : {});
+    for(var key in src) {
+        if(!src.hasOwnProperty(key)) { continue; }
+        var val=src[key];
+        if(val && typeof(val)=='object') { val=clone(val);  }
+        ret[key]=val;
+    }
+    return ret;
+}
+
+function copy(aObject) {
+  var bObject, v, k;
+  bObject = Array.isArray(aObject) ? [] : {};
+  for (k in aObject) {
+    if(!aObject.hasOwnProperty(k)) { continue; }
+    v = aObject[k];
+    bObject[k] = (v === null) ? null : (typeof v === "object") ? copy(v) : v;
+  }
+  return bObject;
+}
+
+function deepClone (obj) {
+    var _out = new obj.constructor;
+    var getType = function (n) {
+        return Object.prototype.toString.call(n).slice(8, -1);
+    }
+    for (var _key in obj) {
+        if (obj.hasOwnProperty(_key)) {
+            _out[_key] = getType(obj[_key]) === 'Object' || getType(obj[_key]) === 'Array' ? deepClone(obj[_key]) : obj[_key];
         }
     }
-    return targetObj
-};
+    return _out;
+}
 
+function deepClone (obj) {
+    var clone = {}
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            var value = obj[key]
+            switch (Object.prototype.toString.call(value).slice(8,-1)) {
+                case 'Object': clone[key] = deepClone(obj[key]); break
+                case 'Array' : clone[key] = value.slice(0); break
+                default      : clone[key] = value
+            }
+        }
+    }
+    return clone
+}
+
+function deepEqual(x, y) {
+  const ok = Object.keys, tx = typeof x, ty = typeof y;
+  return x && y && tx === 'object' && tx === ty ? (
+    ok(x).length === ok(y).length &&
+      ok(x).every(key => deepEqual(x[key], y[key]))
+  ) : (String(x) === String(y));
+}
+
+function objectsAreEqual(a, b) {
+  for (var prop in a) {
+    if (a.hasOwnProperty(prop)) {
+      if (b.hasOwnProperty(prop)) {
+        if (typeof a[prop] === 'object') {
+          if (!objectsAreEqual(a[prop], b[prop])) return false;
+        } else {
+          if (a[prop] !== b[prop]) return false;
+        }
+      } else {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+
+// 事件连续高频触发时不会多次执行，   文本输入keydown 事件，keyup 事件，例如做autocomplete
+const debounce = (func, delay) => {
+  let inDebounce
+  return function() {
+    const context = this
+    const args = arguments
+    clearTimeout(inDebounce)
+    inDebounce = setTimeout(() => func.apply(context, args), delay)
+  }
+}
+
+// 节流 让连续高频事件不会积压，使其有节奏的执行，  适用于  mousemove window对象的resize和scroll 事件
+const throttle = (func, limit) => {
+  let lastFunc
+  let lastRan
+  return function() {
+    const context = this
+    const args = arguments
+    if (!lastRan) {
+      func.apply(context, args)
+      lastRan = Date.now()
+    } else {
+      clearTimeout(lastFunc)
+      lastFunc = setTimeout(function() {
+        if ((Date.now() - lastRan) >= limit) {
+          func.apply(context, args)
+          lastRan = Date.now()
+        }
+      }, limit - (Date.now() - lastRan))
+    }
+  }
+}
+
+
+function throttle2(fn, wait) {
+  let isThrottled = false,
+    lastArgs = null;
+  return function wrapper() {
+    if (isThrottled) {
+      lastArgs = arguments;
+    } else {
+      fn.apply(this, arguments);
+      isThrottled = setTimeout( () => {
+        isThrottled = false;
+        if (lastArgs) {
+          wrapper.apply(this, lastArgs);
+          lastArgs = null;
+        }
+      }, wait);
+    }
+  }
+}
 
 /**
  * 获取url参数
@@ -189,6 +338,82 @@ downFile(blob, fileName)
         },200);
     }
 },
+
+
+var
+    msie,
+    slice             = [].slice,
+    push              = [].push,
+    toString          = Object.prototype.toString;
+
+
+var lowercase = function(string){return isString(string) ? string.toLowerCase() : string;};
+var uppercase = function(string){return isString(string) ? string.toUpperCase() : string;};
+
+
+/**
+ * IE 11 changed the format of the UserAgent string.
+ * See http://msdn.microsoft.com/en-us/library/ms537503.aspx
+ */
+msie = int((/msie (\d+)/.exec(lowercase(navigator.userAgent)) || [])[1]);
+if (isNaN(msie)) {
+  msie = int((/trident\/.*; rv:(\d+)/.exec(lowercase(navigator.userAgent)) || [])[1]);
+}
+
+function isObject(value){return value != null && typeof value == 'object';}
+function isString(value){return typeof value == 'string';}
+function isNumber(value){return typeof value == 'number';}
+function isDate(value){return toString.apply(value) == '[object Date]';}
+function isArray(value) {return toString.apply(value) == '[object Array]';}
+function isFunction(value){return typeof value == 'function';}
+function isRegExp(value) {return toString.apply(value) == '[object RegExp]';}
+function isFile(obj) {return toString.apply(obj) === '[object File]';}
+function isBoolean(value) {return typeof value == 'boolean';}
+function valueFn(value) {return function() {return value;};}
+function int(str) {return parseInt(str, 10);}
+
+var trim = (function() {
+  // native trim is way faster: http://jsperf.com/angular-trim-test
+  // but IE doesn't have it... :-(
+  // TODO: we should move this into IE/ES5 polyfill
+  if (!String.prototype.trim) {
+    return function(value) {
+      return isString(value) ? value.replace(/^\s*/, '').replace(/\s*$/, '') : value;
+    };
+  }
+  return function(value) {
+    return isString(value) ? value.trim() : value;
+  };
+})();
+
+function includes(array, obj) {
+  return indexOf(array, obj) != -1;
+}
+
+
+function indexOf(array, obj) {
+  if (array.indexOf) return array.indexOf(obj);
+
+  for ( var i = 0; i < array.length; i++) {
+    if (obj === array[i]) return i;
+  }
+  return -1;
+}
+
+function arrayRemove(array, value) {
+  var index = indexOf(array, value);
+  if (index >=0)
+    array.splice(index, 1);
+  return value;
+}
+
+function concat(array1, array2, index) {
+  return array1.concat(slice.call(array2, index));
+}
+
+function sliceArgs(args, startIndex) {
+  return slice.call(args, startIndex || 0);
+}
 
 
 

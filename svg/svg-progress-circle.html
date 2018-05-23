@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      svg.progress-circle {
+        height: 1em;
+      }
+      svg.progress-circle text {
+        fill: #003484;
+        font-family: 'Roboto', arial;
+      }
+      svg.progress-circle circle.bg {
+        stroke: #e5e5e5;
+      }
+      svg.progress-circle circle.progress {
+        stroke: #003484;
+        transition: stroke-dashoffset .5s ease-out;
+      }
+    </style>
+  </head>
+  <body style="text-align: center;">
+    <svg style="font-size: 7em" class="progress-circle" viewBox="0 0 44 44">
+      <text x="22" y="22" font-size="7" text-anchor="middle" alignment-baseline="central">
+        78.5%
+      </text>
+      <circle class="bg" r="16" cx="22" cy="22" stroke-width="4" fill="none"></circle>
+      <circle class="progress" r="16" cx="22" cy="22" transform="rotate(-90, 22, 22)" stroke-width="4" fill="none" stroke-dasharray="100" stroke-dashoffset="21.5">
+      </circle>
+      <!-- stroke-dashoffset = 100 - progressPercent -->
+      <!-- transform is used to make the progress circle start at 12 o'clock -->
+    </svg>
+
+
+    <div id="dontKeepThis">
+      <select onchange="setProgressValue(this.value)">
+        <option value="0">0%</option>
+        <option value="10">10%</option>
+        <option value="30">30%</option>
+        <option value="40">40%</option>
+        <option value="78.5" selected>78.5%</option>
+        <option value="90">90%</option>
+        <option value="100">100%</option>
+      </select>
+      <script>
+        window.setProgressValue = function(progress) {
+          document.querySelector('svg text').innerHTML = progress + '%';
+          document.querySelector('circle.progress').style.strokeDashoffset = 100 - progress;
+        };
+      </script>
+    </div>
+  </body>
+</html>

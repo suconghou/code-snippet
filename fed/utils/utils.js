@@ -460,6 +460,12 @@ function sliceArgs(args, startIndex) {
 }
 
 
+// 数组中随机取一个
+
+var item = items[Math.floor(Math.random()*items.length)];
+
+
+
 
 var http = require('http');
 exec = require('child_process').exec;

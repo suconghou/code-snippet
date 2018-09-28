@@ -146,7 +146,7 @@ function uuidv4() {
   )
 }
 
-/* deep clone 的 几点注意  
+/* deep clone 的 几点注意
 1. 处理原型上添加的属性不能被clone, 需使用 hasOwnProperty
 2. 处理null,null被clone后不能变成{}
 3. 处理array与object,类型不能变
@@ -324,6 +324,12 @@ export default function compose(...funcs) {
   }
 
   return funcs.reduce((a, b) => (...args) => a(b(...args)))
+}
+
+
+
+function sequence(tasks, fn) {
+    return tasks.reduce((promise, task) => promise.then(() => fn(task)), Promise.resolve());
 }
 
 

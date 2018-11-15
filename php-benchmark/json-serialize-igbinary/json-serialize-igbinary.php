@@ -7,7 +7,7 @@ $array = array_fill(0, 1e6, "hello world 你 我 他 ".rand(1e9, 9e9));
 
 testcase($array);
 
-$info = [ 'name' => 'SU','age' => 27,'country' => 'China'];
+$info = [ 'name' => 'SU 西门吹雪 上官飞燕','age' => 27,'country' => 'China'];
 $array = [];
 for($i = 0; $i < 2e5; $i++)
 {

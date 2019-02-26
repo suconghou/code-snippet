@@ -1,0 +1,1 @@
+mt_rand,rand is fater than random_int

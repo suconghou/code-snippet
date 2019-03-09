@@ -14,6 +14,12 @@ function random_string($nc)
     return bin2hex($bytes);
 }
 
+function random_string2($nc)
+{
+    $bytes = openssl_random_pseudo_bytes($nc/2);
+    return bin2hex($bytes);
+}
+
 
 function test1()
 {
@@ -32,7 +38,6 @@ function test1()
 function test2()
 {
     $t0 = microtime(true);
-
     for ($i=0; $i<90000; $i++) 
     {
         random_string(10);
@@ -40,6 +45,21 @@ function test2()
     echo 'random_string: '.(microtime(true)-$t0).PHP_EOL;
 
 }
+
+
+
+function test2_2()
+{
+    $t0 = microtime(true);
+    for ($i=0; $i<90000; $i++) 
+    {
+        random_string2(10);
+    }
+    echo 'openssl_random_pseudo_bytes: '.(microtime(true)-$t0).PHP_EOL;
+
+}
+
+
 
 
 function test3()
@@ -91,6 +111,7 @@ echo PHP_VERSION,"\n";
 
 test1();
 test2();
+test2_2();
 test3();
 test4();
 test5();

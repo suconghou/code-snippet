@@ -21,3 +21,9 @@ gd 库中的
 
 mime_content_type 直接检测文件信息， 给出 `mime`
 
+```
+getimagesize took 1.1480870246887 seconds.
+exif_imagetype took 0.92027592658997 seconds.
+mime_content_type took 2.9834370613098 seconds.
+minimime took 1.0923340320587 seconds.
+```

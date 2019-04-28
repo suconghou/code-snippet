@@ -22,11 +22,15 @@ function testcase($array)
 
 	$start = microtime(true);
 	$export = json_encode($array);
+	$export = json_encode($array);
+	$export = json_encode($array);
 	$end = microtime(true);
 	$duration = $end - $start;
 	print('JSON Encode: ' . $duration .' Len: '.round(strlen($export)/1024,2).'KB'. PHP_EOL);
 
 	$start = microtime(true);
+	$import = json_decode($export);
+	$import = json_decode($export);
 	$import = json_decode($export);
 	$end = microtime(true);
 	$duration = $end - $start;
@@ -34,11 +38,15 @@ function testcase($array)
 
 	$start = microtime(true);
 	$export = serialize($array);
+	$export = serialize($array);
+	$export = serialize($array);
 	$end = microtime(true);
 	$duration = $end - $start;
 	print('Serialize: ' . $duration .' Len: '.round(strlen($export)/1024,2).'KB'. PHP_EOL);
 
 	$start = microtime(true);
+	$import = unserialize($export);
+	$import = unserialize($export);
 	$import = unserialize($export);
 	$end = microtime(true);
 	$duration = $end - $start;
@@ -46,11 +54,15 @@ function testcase($array)
 
 	$start = microtime(true);
 	$export = igbinary_serialize($array);
+	$export = igbinary_serialize($array);
+	$export = igbinary_serialize($array);
 	$end = microtime(true);
 	$duration = $end - $start;
 	print('Igbinary Serialize: ' . $duration .' Len: '.round(strlen($export)/1024,2).'KB'. PHP_EOL);
 
 	$start = microtime(true);
+	$import = igbinary_unserialize($export);
+	$import = igbinary_unserialize($export);
 	$import = igbinary_unserialize($export);
 	$end = microtime(true);
 	$duration = $end - $start;
@@ -59,11 +71,15 @@ function testcase($array)
 
 	$start = microtime(true);
 	$export = msgpack_pack($array);
+	$export = msgpack_pack($array);
+	$export = msgpack_pack($array);
 	$end = microtime(true);
 	$duration = $end - $start;
 	print('Msgpack Serialize: ' . $duration .' Len: '.round(strlen($export)/1024,2).'KB'. PHP_EOL);
 
 	$start = microtime(true);
+	$import = msgpack_unpack($export);
+	$import = msgpack_unpack($export);
 	$import = msgpack_unpack($export);
 	$end = microtime(true);
 	$duration = $end - $start;

@@ -1,125 +1,123 @@
 export const waitUntil = (c, fun, fall, dur = 50, maxTimes = 20) => {
-    let times = 0;
-    const funwarp = () => {
-        const ret = c();
-        times++;
-        if (ret) {
-            fun(times);
-        } else if (times < maxTimes) {
-            setTimeout(() => {
-                funwarp();
-            }, dur)
-        } else {
-            fall && fall(times);
-        }
+  let times = 0;
+  const funwarp = () => {
+    const ret = c();
+    times++;
+    if (ret) {
+      fun(times);
+    } else if (times < maxTimes) {
+      setTimeout(() => {
+        funwarp();
+      }, dur)
+    } else {
+      fall && fall(times);
     }
-    funwarp();
+  }
+  funwarp();
 }
 
 
 export const toWan = (v) => {
-    const val = (v / 10000).toFixed(1);
-    if (isNaN(val)) {
-        return '';
-    }
-    const vint = parseInt(val);
-    if (vint == val) {
-        return vint;
-    }
-    return val;
+  const val = (v / 10000).toFixed(1);
+  if (isNaN(val)) {
+    return '';
+  }
+  const vint = parseInt(val);
+  if (vint == val) {
+    return vint;
+  }
+  return val;
 }
 
 
 // 返回被移除的元素 ，未找到返回[]
 export const arrRemove = (arr, id) => {
-    let index;
-    for (let i = 0, len = arr.length; i < len; i++) {
-        const item = arr[i];
-        if (item.id === id) {
-            return arr.splice(i, 1);
-        }
+  let index;
+  for (let i = 0, len = arr.length; i < len; i++) {
+    const item = arr[i];
+    if (item.id === id) {
+      return arr.splice(i, 1);
     }
-    return [];
+  }
+  return [];
 }
 
 export const arrInclude = (big, small) => {
-    for (let i in small) {
-        let item = small[i];
-        if (big.indexOf(item) < 0) {
-            return false;
-        }
+  for (let i in small) {
+    let item = small[i];
+    if (big.indexOf(item) < 0) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
 
 export const replace = (str, ...args) => {
-    let s = str;
-    args.forEach(arr => {
-        s = s.replace(arr[0], arr[1]);
-    })
-    return s;
+  let s = str;
+  args.forEach(arr => {
+    s = s.replace(arr[0], arr[1]);
+  })
+  return s;
 }
 
 // 不带小数，最大支持亿兆
 export const digitUppercase = n => {
-    n = Math.abs(n);
-    var s = '';
-    var digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];
-    var unit = [
-        ['', '万', '亿', '兆'],
-        ['', '拾', '佰', '仟']
-    ];
-    for (let i = 0; i < unit[0].length; i++) {
-        let p = '';
-        for (let j = 0; j < unit[1].length; j++) {
-            p = digit[n % 10] + unit[1][j] + p;
-            n = Math.floor(n / 10);
-        }
-        s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+  n = Math.abs(n);
+  var s = '';
+  var digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];
+  var unit = [
+    ['', '万', '亿', '兆'],
+    ['', '拾', '佰', '仟']
+  ];
+  for (let i = 0; i < unit[0].length; i++) {
+    let p = '';
+    for (let j = 0; j < unit[1].length; j++) {
+      p = digit[n % 10] + unit[1][j] + p;
+      n = Math.floor(n / 10);
     }
-    return s.replace(/(零.)+/g, '零').replace(/(^零|零$)/g, '');
+    s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+  }
+  return s.replace(/(零.)+/g, '零').replace(/(^零|零$)/g, '');
 }
 
 export const extendKey = (keys, origin, target) => {
-    keys.forEach((i) => {
-        target[i] = origin[i];
-    });
-    return target;
+  keys.forEach((i) => {
+    target[i] = origin[i];
+  });
+  return target;
 }
 // 不改变原对象
 export const getKValue = (...args) => {
-    let obj = args.shift();
-    for (let i in args) {
-        let k = args[i];
-        obj = obj[k]
-        if (typeof obj === 'undefined') {
-            return obj;
-        }
+  let obj = args.shift();
+  for (let i in args) {
+    let k = args[i];
+    obj = obj[k]
+    if (typeof obj === 'undefined') {
+      return obj;
     }
-    return obj;
+  }
+  return obj;
 }
 
-export const byteFormat = (size)=>{
-    var name=['B','KB','MB','GB','TB','PB','EB','ZB','YB'];
-    var pos=0;
-    while(size>=1204) {
-        size/=1024;
-        pos++;
-    }
-    return size.toFixed(2)+" "+name[pos];
+export const byteFormat = (size) => {
+  var name = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  var pos = 0;
+  while (size >= 1204) {
+    size /= 1024;
+    pos++;
+  }
+  return size.toFixed(2) + " " + name[pos];
 }
 
-export const timeBefore = (t)=>{
-    var sec=[31536000,2592000,604800,86400,3600,60,1];
-    var ext=['年','个月','星期','天','小时','分钟','秒'];
-    for(let i in sec)
-    {
-        const x=Math.floor(t/sec[i]);
-        if(x!=0)
-        {
-            return `${x}${ext[i]}前`;
-        }
+export const timeBefore = (t) => {
+  var sec = [31536000, 2592000, 604800, 86400, 3600, 60, 1];
+  var ext = ['年', '个月', '星期', '天', '小时', '分钟', '秒'];
+  for (let i in sec) {
+    const x = Math.floor(t / sec[i]);
+    if (x != 0) {
+      return `${x}${ext[i]}前`;
     }
+  }
 }
 
 
@@ -134,14 +132,14 @@ function guid() {
 
 
 function uuidv4() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
 }
 
 function uuidv4() {
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
   )
 }
@@ -155,61 +153,66 @@ function uuidv4() {
 
 
 
+// 对于正则,和Date,Map,Set等对象无法拷贝
 function clone(src) {
-    var ret=(src instanceof Array ? [] : {});
-    for(var key in src) {
-        if(!src.hasOwnProperty(key)) { continue; }
-        var val=src[key];
-        if(val && typeof(val)=='object') { val=clone(val);  }
-        ret[key]=val;
-    }
-    return ret;
+  var ret = (src instanceof Array ? [] : {});
+  for (var key in src) {
+    if (!src.hasOwnProperty(key)) { continue; }
+    var val = src[key];
+    if (val && typeof (val) == 'object') { val = clone(val); }
+    ret[key] = val;
+  }
+  return ret;
 }
 
+// 正则和Date,Map,Set对象等无法拷贝
 function copy(aObject) {
   var bObject, v, k;
   bObject = Array.isArray(aObject) ? [] : {};
   for (k in aObject) {
-    if(!aObject.hasOwnProperty(k)) { continue; }
+    if (!aObject.hasOwnProperty(k)) { continue; }
     v = aObject[k];
     bObject[k] = (v === null) ? null : (typeof v === "object") ? copy(v) : v;
   }
   return bObject;
 }
 
-function deepClone (obj) {
-    var _out = new obj.constructor;
-    var getType = function (n) {
-        return Object.prototype.toString.call(n).slice(8, -1);
+// 可以拷贝正则和Date,Map,Set
+function deepClone(obj) {
+  var _out = new obj.constructor;
+  var getType = function (n) {
+    return Object.prototype.toString.call(n).slice(8, -1);
+  }
+  for (var _key in obj) {
+    if (obj.hasOwnProperty(_key)) {
+      _out[_key] = getType(obj[_key]) === 'Object' || getType(obj[_key]) === 'Array' ? deepClone(obj[_key]) : obj[_key];
     }
-    for (var _key in obj) {
-        if (obj.hasOwnProperty(_key)) {
-            _out[_key] = getType(obj[_key]) === 'Object' || getType(obj[_key]) === 'Array' ? deepClone(obj[_key]) : obj[_key];
-        }
-    }
-    return _out;
+  }
+  return _out;
 }
 
-function deepClone (obj) {
-    var clone = {}
-    for (var key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            var value = obj[key]
-            switch (Object.prototype.toString.call(value).slice(8,-1)) {
-                case 'Object': clone[key] = deepClone(obj[key]); break
-                case 'Array' : clone[key] = value.slice(0); break
-                default      : clone[key] = value
-            }
-        }
+// 可以拷贝正则和Date,Map,Set
+
+function deepClone(obj) {
+  var clone = new obj.constructor
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      var value = obj[key]
+      switch (Object.prototype.toString.call(value).slice(8, -1)) {
+        case 'Object': clone[key] = deepClone(obj[key]); break
+        case 'Array': clone[key] = value.slice(0); break
+        default: clone[key] = value
+      }
     }
-    return clone
+  }
+  return clone
 }
 
 function deepEqual(x, y) {
   const ok = Object.keys, tx = typeof x, ty = typeof y;
   return x && y && tx === 'object' && tx === ty ? (
     ok(x).length === ok(y).length &&
-      ok(x).every(key => deepEqual(x[key], y[key]))
+    ok(x).every(key => deepEqual(x[key], y[key]))
   ) : (String(x) === String(y));
 }
 
@@ -234,7 +237,7 @@ function objectsAreEqual(a, b) {
 // 事件连续高频触发时不会多次执行，   文本输入keydown 事件，keyup 事件，例如做autocomplete
 const debounce = (func, delay) => {
   let inDebounce
-  return function() {
+  return function () {
     const context = this
     const args = arguments
     clearTimeout(inDebounce)
@@ -246,7 +249,7 @@ const debounce = (func, delay) => {
 const throttle = (func, limit) => {
   let lastFunc
   let lastRan
-  return function() {
+  return function () {
     const context = this
     const args = arguments
     if (!lastRan) {
@@ -254,7 +257,7 @@ const throttle = (func, limit) => {
       lastRan = Date.now()
     } else {
       clearTimeout(lastFunc)
-      lastFunc = setTimeout(function() {
+      lastFunc = setTimeout(function () {
         if ((Date.now() - lastRan) >= limit) {
           func.apply(context, args)
           lastRan = Date.now()
@@ -273,7 +276,7 @@ function throttle2(fn, wait) {
       lastArgs = arguments;
     } else {
       fn.apply(this, arguments);
-      isThrottled = setTimeout( () => {
+      isThrottled = setTimeout(() => {
         isThrottled = false;
         if (lastArgs) {
           wrapper.apply(this, lastArgs);
@@ -329,7 +332,7 @@ export default function compose(...funcs) {
 
 
 function sequence(tasks, fn) {
-    return tasks.reduce((promise, task) => promise.then(() => fn(task)), Promise.resolve());
+  return tasks.reduce((promise, task) => promise.then(() => fn(task)), Promise.resolve());
 }
 
 
@@ -340,65 +343,62 @@ function sequence(tasks, fn) {
  * @returns {object} params - 参数对象
  */
 function URLSearchParams(url) {
-    const SearchParams = url.split("?");
-    const params = {};
-    if (SearchParams.length > 1) {
-        const SearchParam = SearchParams[1].split("&");
-        for (let i = 0; i < SearchParam.length; i++) {
-            const arr = SearchParam[i].split("=");
-            params[arr[0]] = arr[1];
-        }
-        return params;
+  const SearchParams = url.split("?");
+  const params = {};
+  if (SearchParams.length > 1) {
+    const SearchParam = SearchParams[1].split("&");
+    for (let i = 0; i < SearchParam.length; i++) {
+      const arr = SearchParam[i].split("=");
+      params[arr[0]] = arr[1];
     }
     return params;
+  }
+  return params;
 }
 
 param(obj) {
-    var arr = [];
-    obj = _.isArray(obj)?obj:[obj];
-    obj.forEach(obj=>{
-        for (let i in obj) {
-            if (obj.hasOwnProperty(i)) {
-                arr.push(i + '=' + obj[i]);
-            }
-        }
-    })
-    arr = arr.join('&');
-    return arr;
+  var arr = [];
+  obj = _.isArray(obj) ? obj : [obj];
+  obj.forEach(obj => {
+    for (let i in obj) {
+      if (obj.hasOwnProperty(i)) {
+        arr.push(i + '=' + obj[i]);
+      }
+    }
+  })
+  arr = arr.join('&');
+  return arr;
 },
 
 downFile(blob, fileName)
 {
-    if (window.navigator.msSaveOrOpenBlob)
-    {
-        navigator.msSaveBlob(blob, fileName);
-    }
-    else
-    {
-        var link = document.createElement('a');
-        link.display='none';
-        link.href = window.URL.createObjectURL(blob);
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        setTimeout(function()
-        {
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(link.href);
-        },200);
-    }
+  if (window.navigator.msSaveOrOpenBlob) {
+    navigator.msSaveBlob(blob, fileName);
+  }
+  else {
+    var link = document.createElement('a');
+    link.display = 'none';
+    link.href = window.URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(function () {
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(link.href);
+    }, 200);
+  }
 },
 
 
 var
-    msie,
-    slice             = [].slice,
-    push              = [].push,
-    toString          = Object.prototype.toString;
+  msie,
+  slice = [].slice,
+  push = [].push,
+  toString = Object.prototype.toString;
 
 
-var lowercase = function(string){return isString(string) ? string.toLowerCase() : string;};
-var uppercase = function(string){return isString(string) ? string.toUpperCase() : string;};
+var lowercase = function (string) { return isString(string) ? string.toLowerCase() : string; };
+var uppercase = function (string) { return isString(string) ? string.toUpperCase() : string; };
 
 
 /**
@@ -410,28 +410,28 @@ if (isNaN(msie)) {
   msie = int((/trident\/.*; rv:(\d+)/.exec(lowercase(navigator.userAgent)) || [])[1]);
 }
 
-function isObject(value){return value != null && typeof value == 'object';}
-function isString(value){return typeof value == 'string';}
-function isNumber(value){return typeof value == 'number';}
-function isDate(value){return toString.apply(value) == '[object Date]';}
-function isArray(value) {return toString.apply(value) == '[object Array]';}
-function isFunction(value){return typeof value == 'function';}
-function isRegExp(value) {return toString.apply(value) == '[object RegExp]';}
-function isFile(obj) {return toString.apply(obj) === '[object File]';}
-function isBoolean(value) {return typeof value == 'boolean';}
-function valueFn(value) {return function() {return value;};}
-function int(str) {return parseInt(str, 10);}
+function isObject(value) { return value != null && typeof value == 'object'; }
+function isString(value) { return typeof value == 'string'; }
+function isNumber(value) { return typeof value == 'number'; }
+function isDate(value) { return toString.apply(value) == '[object Date]'; }
+function isArray(value) { return toString.apply(value) == '[object Array]'; }
+function isFunction(value) { return typeof value == 'function'; }
+function isRegExp(value) { return toString.apply(value) == '[object RegExp]'; }
+function isFile(obj) { return toString.apply(obj) === '[object File]'; }
+function isBoolean(value) { return typeof value == 'boolean'; }
+function valueFn(value) { return function () { return value; }; }
+function int(str) { return parseInt(str, 10); }
 
-var trim = (function() {
+var trim = (function () {
   // native trim is way faster: http://jsperf.com/angular-trim-test
   // but IE doesn't have it... :-(
   // TODO: we should move this into IE/ES5 polyfill
   if (!String.prototype.trim) {
-    return function(value) {
+    return function (value) {
       return isString(value) ? value.replace(/^\s*/, '').replace(/\s*$/, '') : value;
     };
   }
-  return function(value) {
+  return function (value) {
     return isString(value) ? value.trim() : value;
   };
 })();
@@ -444,7 +444,7 @@ function includes(array, obj) {
 function indexOf(array, obj) {
   if (array.indexOf) return array.indexOf(obj);
 
-  for ( var i = 0; i < array.length; i++) {
+  for (var i = 0; i < array.length; i++) {
     if (obj === array[i]) return i;
   }
   return -1;
@@ -452,7 +452,7 @@ function indexOf(array, obj) {
 
 function arrayRemove(array, value) {
   var index = indexOf(array, value);
-  if (index >=0)
+  if (index >= 0)
     array.splice(index, 1);
   return value;
 }
@@ -468,39 +468,39 @@ function sliceArgs(args, startIndex) {
 
 // 数组中随机取一个
 
-var item = items[Math.floor(Math.random()*items.length)];
+var item = items[Math.floor(Math.random() * items.length)];
 
 
 
 
 var http = require('http');
 exec = require('child_process').exec;
-http.createServer(function (request,response) {
-    if(request.method=="POST"){
-        var POSTData=""
-        request.on('data',(chunk)=>{
-            POSTData+=chunk;
-        })
-        request.on('end',()=>{
-            try{
-                var data=JSON.parse(POSTData)
-                if(
-                    typeof data =="object"
-                    && typeof data.project =="object" && data.project.name.length>0
-                ){
-                    exec(`git pull`,{
-                        cwd:`/web/server/${data.project.name}`
-                    },function (err,stdout,stderr) {
-                        console.log(`git pull ${data.project.name}`)
-                    })
-                }else{
-                    response.end();
-                }
-            }catch (e){
-                response.end();
-            }
-        })
-    }
+http.createServer(function (request, response) {
+  if (request.method == "POST") {
+    var POSTData = ""
+    request.on('data', (chunk) => {
+      POSTData += chunk;
+    })
+    request.on('end', () => {
+      try {
+        var data = JSON.parse(POSTData)
+        if (
+          typeof data == "object"
+          && typeof data.project == "object" && data.project.name.length > 0
+        ) {
+          exec(`git pull`, {
+            cwd: `/web/server/${data.project.name}`
+          }, function (err, stdout, stderr) {
+            console.log(`git pull ${data.project.name}`)
+          })
+        } else {
+          response.end();
+        }
+      } catch (e) {
+        response.end();
+      }
+    })
+  }
 }).listen(61234)
 
 

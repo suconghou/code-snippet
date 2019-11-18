@@ -41,7 +41,7 @@ function test_sqlite()
 {
     $table = 'cache';
     $instance = new SQLite3('/dev/shm/1.db');
-    foreach (['PRAGMA SYNCHRONOUS=OFF', 'PRAGMA CACHE_SIZE=50000', 'PRAGMA TEMP_STORE=MEMORY', 'CREATE TABLE IF NOT EXISTS ' . $table . ' ("k" text NOT NULL, "v" text NOT NULL, "t" integer NOT NULL, PRIMARY KEY ("k") )'] as $sql) {
+    foreach (['PRAGMA JOURNAL_MODE=OFF', 'PRAGMA LOCKING_MODE=EXCLUSIVE', 'PRAGMA SYNCHRONOUS=OFF', 'PRAGMA CACHE_SIZE=8000', 'PRAGMA PAGE_SIZE=4096', 'PRAGMA TEMP_STORE=MEMORY', 'CREATE TABLE IF NOT EXISTS ' . $table . ' ("k" text NOT NULL, "v" text NOT NULL, "t" integer NOT NULL, PRIMARY KEY ("k") )'] as $sql) {
         $instance->exec($sql);
     }
     $t = time() + 3600;
@@ -57,15 +57,14 @@ function test_sqlite()
     }
     $t3 = microtime(true);
     for ($i = 0; $i < 5e2; $i++) {
-        $instance->exec('UPDATE '.$table." SET v='$t' WHERE k='key{$i}' ");
+        $instance->exec('UPDATE ' . $table . " SET v='$t' WHERE k='key{$i}' ");
     }
     $t4 = microtime(true);
     for ($i = 0; $i < 5e2; $i++) {
-        $instance->exec('DELETE FROM '.$table." WHERE k='key{$i}' ");
+        $instance->exec('DELETE FROM ' . $table . " WHERE k='key{$i}' ");
     }
     $t5 = microtime(true);
     echo sprintf("sqlite : insert %f , select %f , update %f, delete %f", $t2 - $t1, $t3 - $t2, $t4 - $t3, $t5 - $t4), PHP_EOL;
-
 }
 
 try {

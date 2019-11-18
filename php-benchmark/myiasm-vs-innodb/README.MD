@@ -34,7 +34,28 @@ sqlite : insert 0.125249 , select 0.025842 , update 0.110842, delete 0.121395
 
 > `sqlite` 的查询比其他的快10倍,单次约 0.048ms  每秒处理 20798 次, 查询轻度使用相当于redis
 
+sqlite 性能的提升得益于 `PRAGMA SYNCHRONOUS=OFF` 指令. 但此仅极大提高插入,修改,删除,速度;
+查询速度始终都是最快的.
 
+与 `'PRAGMA CACHE_SIZE=50000', 'PRAGMA TEMP_STORE=MEMORY'` 和是否在`/dev/shm/`中无关
+
+`PRAGMA JOURNAL_MODE=OFF` 也可提升写性能
+
+```
+test_1 : insert 0.117552 , select 0.232488 , update 0.152223, delete 0.159850
+test_2 : insert 4.211176 , select 0.236098 , update 4.206038, delete 4.425278
+test_3 : insert 0.076462 , select 0.218319 , update 0.117334, delete 0.101830
+sqlite : insert 0.051241 , select 0.023352 , update 0.044922, delete 0.044684
+```
+
+`PRAGMA LOCKING_MODE=EXCLUSIVE` 模式更能大幅提高`sqlite`整体性能
+
+```
+test_1 : insert 0.120191 , select 0.232615 , update 0.156415, delete 0.168097
+test_2 : insert 4.186871 , select 0.256714 , update 4.610582, delete 4.275338
+test_3 : insert 0.076355 , select 0.240730 , update 0.121399, delete 0.105168
+sqlite : insert 0.022969 , select 0.008269 , update 0.017206, delete 0.016815
+```
 
 
 

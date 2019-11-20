@@ -60,6 +60,14 @@ shmop : set 0.000772
 > 算上open与close时间,性能是不如swoole,相差几十倍
 
 
+```
+swoole : set 0.005579 , get 0.004952 , delete 0.003488
+```
+
+CPU性能提升,对swoole table也能大幅提升性能
+
+较好的CPU每秒可执行400万查询
+
 
 System V信号量，编译时加上 –enable-sysvsem
 System V共享内存，编译时加上 –enable-sysvshm

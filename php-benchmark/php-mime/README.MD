@@ -27,3 +27,11 @@ exif_imagetype took 0.92027592658997 seconds.
 mime_content_type took 2.9834370613098 seconds.
 minimime took 1.0923340320587 seconds.
 ```
+
+`mime_content_type` 是最慢的
+
+`exif_imagetype`是最快的
+
+`getimagesize` 和  `exif_imagetype` 如果不是图片,受文件大小而影响速度
+
+`minimime` 只检测前几个字节,始终都是比较快的

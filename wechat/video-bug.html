@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        video {
+            width: 100%;
+            height: 90%;
+        }
+
+        .time {
+            height: 30px;
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <video
+        src="https://play.ourwill.cn/tuwenzb/twv1_388400_lud.m3u8?auth_key=1588677727-0-0-71cda31ddd9715a46c9191e553b6b03a"
+        id="1" controls x5-video-player-type="h5-page"></video>
+    <div class="time"></div>
+</body>
+<script>
+    const v = document.querySelector("video")
+    const t = document.querySelector(".time")
+    // 使用WeixinJSBridgeReady 即得到的currentTime 就是定值了
+    document.addEventListener('WeixinJSBridgeReady', () => {
+        v.play()
+    });
+
+    document.addEventListener('YixinJSBridgeReady', () => {
+        v.play()
+    });
+    v.addEventListener('timeupdate', () => {
+        t.innerHTML = v.currentTime
+    })
+    setInterval(() => {
+        t.innerHTML = v.currentTime
+    }, 1000);
+</script>
+
+</html>

@@ -72,3 +72,27 @@ Igbinary is best
 
 > Json decode is slower than Serialize
 
+
+# gzip 后的比较
+
+寻求一种小数据压缩方案  1-4 KB 数据
+
+对比 msgpack vs json vs json+gzip 
+
+默认压缩级别
+
+数据1 (5619字节) json+gz 最小, msgpack+gz次之
+
+数据2 (1037字节) json+gz 最小,  msgpack+gz次之
+
+数据3 (537字节) msgpack+gz 最小, json+gz次之
+
+压缩级别为7则
+
+
+
+
+
+
+
+

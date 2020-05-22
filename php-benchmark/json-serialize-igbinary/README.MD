@@ -81,13 +81,33 @@ Igbinary is best
 
 默认压缩级别
 
+```
+1json:5619
+2json:1037
+3json:218
+
+1json+gz:2076
+2json+gz:338
+3json+gz:169
+
+1msgpack:4384
+2msgpack:850
+3msgpack:195
+
+1msgpack+gz:2215
+2msgpack+gz:367
+3msgpack+gz:169
+```
+
 数据1 (5619字节) json+gz 最小, msgpack+gz次之
 
 数据2 (1037字节) json+gz 最小,  msgpack+gz次之
 
-数据3 (537字节) msgpack+gz 最小, json+gz次之
+数据3 (218字节) msgpack+gz 与 json+gz 一样
 
-压缩级别为7则
+
+`json+gz` 在1000字节以上就能压缩为原来的三分之一
+
 
 
 

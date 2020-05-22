@@ -21,22 +21,26 @@
 <body>
     <video
         src="https://play.ourwill.cn/tuwenzb/twv1_388400_lud.m3u8?auth_key=1588677727-0-0-71cda31ddd9715a46c9191e553b6b03a"
-        id="1" controls x5-video-player-type="h5-page"></video>
+        id="1" controls x5-video-player-type="h5-page" muted></video>
     <div class="time"></div>
 </body>
 <script>
     const v = document.querySelector("video")
     const t = document.querySelector(".time")
     // 使用WeixinJSBridgeReady 即得到的currentTime 就是定值了
+    // 非用户触发的play事件,currentTime的值始终不对
+    // 添加autoplay 属性,也会造成影响
     document.addEventListener('WeixinJSBridgeReady', () => {
         v.play()
     });
-
-    document.addEventListener('YixinJSBridgeReady', () => {
-        v.play()
-    });
-    v.addEventListener('timeupdate', () => {
-        t.innerHTML = v.currentTime
+    // document.addEventListener('YixinJSBridgeReady', () => {
+    //     v.play()
+    // });
+    // document.addEventListener('touchstart', () => {
+    //     v.play()
+    // })
+    v.addEventListener('timeupdate', (e) => {
+        t.innerHTML = e.target.currentTime
     })
     setInterval(() => {
         t.innerHTML = v.currentTime

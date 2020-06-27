@@ -29,6 +29,16 @@ echo "2json+gz:", strlen($gz2), PHP_EOL;
 echo "3json+gz:", strlen($gz3), PHP_EOL, PHP_EOL;
 
 
+$zlib1 = zlib_encode($jj1,ZLIB_ENCODING_DEFLATE);
+$zlib2 = zlib_encode($jj2,ZLIB_ENCODING_DEFLATE);
+$zlib3 = zlib_encode($jj3,ZLIB_ENCODING_DEFLATE);
+
+echo "1json+zlib:", strlen($zlib1), PHP_EOL;
+echo "2json+zlib:", strlen($zlib2), PHP_EOL;
+echo "3json+zlib:", strlen($zlib3), PHP_EOL, PHP_EOL;
+
+
+
 $m1 = msgpack_pack($j1);
 $m2 = msgpack_pack($j2);
 $m3 = msgpack_pack($j3);

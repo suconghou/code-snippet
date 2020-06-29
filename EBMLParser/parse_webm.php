@@ -5,12 +5,14 @@
 class EBMLParser
 {
     public static $map = [
-        '1c53bb6b' => ['Cues', 'master'],  // lvl. 1
-        'bb' => ['CuePoint', 'master'],      // lvl. 2
-        'b3' => ['CueTime', 'uinteger'],    // lvl. 3
-        'b7' => ['CueTrackPositions', 'master'],      // lvl. 3
-        'f7' => ['CueTrack', 'uinteger'],    // lvl. 4
-        'f1' => ['CueClusterPosition', 'uinteger'],    // lvl. 4
+        '1a45dfa3' => ['EBML', 'm'],
+        '4286' => ['EBMLVersion', 'u'],
+        '1c53bb6b' => ['Cues', 'm'],  // lvl. 1
+        'bb' => ['CuePoint', 'm'],      // lvl. 2
+        'b3' => ['CueTime', 'u'],    // lvl. 3
+        'b7' => ['CueTrackPositions', 'm'],      // lvl. 3
+        'f7' => ['CueTrack', 'u'],    // lvl. 4
+        'f1' => ['CueClusterPosition', 'u'],    // lvl. 4
     ];
 
     static function info(string $id)
@@ -117,7 +119,7 @@ class EBMLParserElement
         $element = new EBMLParserElement($data);
         $element->id = $id;
         [$element->name, $element->type] = EBMLParser::info($id);
-        if ($element->type == 'master') {
+        if ($element->type == 'm') {
             $element->parseElements();
         } else {
             $element->value = base_convert(bin2hex($data), 16, 10);
@@ -167,6 +169,7 @@ $maxlen = 286;
 
 $data = file_get_contents($f, false, null, $offset, $maxlen);
 
+$data = file_get_contents('/tmp/12');
 
 var_dump(strlen($data), md5_file($f),  md5($data));
 

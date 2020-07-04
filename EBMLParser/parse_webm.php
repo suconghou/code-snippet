@@ -5,8 +5,8 @@
 class EBMLParser
 {
     public static $map = [
-        '1a45dfa3' => ['EBML', 'm'],
-        '4286' => ['EBMLVersion', 'u'],
+        // '1a45dfa3' => ['EBML', 'm'],
+        // '4286' => ['EBMLVersion', 'u'],
         '1c53bb6b' => ['Cues', 'm'],  // lvl. 1
         'bb' => ['CuePoint', 'm'],      // lvl. 2
         'b3' => ['CueTime', 'u'],    // lvl. 3
@@ -46,6 +46,14 @@ class EBMLParserBuffer
     }
 
 
+    /**
+     * vint 解析
+     * 先读一字节,判断此字节的前多少bit位是0 => VINT_WIDTH
+     * VINT_WIDTH+1表示对应的vint占用的字节数目 => 即得出id
+     * 下面分析length 和 value 
+     * 再读一字节
+     * 
+     */
     function readVint()
     {
         $s = $this->read(1);
@@ -54,7 +62,7 @@ class EBMLParserBuffer
         $s = $this->read(1);
         $w = self::vIntWidth($s) + 1;
         $len = $this->rewind(1)->read($w);
-        $lenNum = self::vIntNum($len, $w);
+        $lenNum = self::vIntNum($len);
         $data = $this->read($lenNum);
         return [
             "id" => bin2hex($id),
@@ -83,10 +91,18 @@ class EBMLParserBuffer
     }
 
     // 传入若干个字节 最高位1置为0后转为十进制数
-    // 我们已知高位前w-1位都是0,只需要将前高位w字节都置为0, $w 取值有 1-8
-    private static function vIntNum($byte, $w)
+    private static function vIntNum($byte)
     {
-        return base_convert(bin2hex($byte), 16, 10) & (2 ** (8 - $w) - 1);
+        $x = base_convert(bin2hex($byte), 16, 10);
+        $k = 0;
+        if ($x >> ($k ^ 32))  $k = $k ^ 32;
+        if ($x >> ($k ^ 16)) $k = $k ^ 16;
+        if ($x >> ($k ^ 8)) $k = $k ^ 8;
+        if ($x >> ($k ^ 4)) $k = $k ^ 4;
+        if ($x >> ($k ^ 2)) $k = $k ^ 2;
+        if ($x >> ($k ^ 1)) $k = $k ^ 1;
+        $x = $x ^ (1 << $k);
+        return $x;
     }
 }
 
@@ -145,7 +161,6 @@ class EBMLParserElement
 
 class parser
 {
-    private $index = 0;
 
     function __construct(string $data)
     {

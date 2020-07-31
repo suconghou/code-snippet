@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <div class="log"></div>
+    </div>
+
+    <script>
+
+        function log(msg) {
+            const a = document.querySelector('.log')
+            a.innerHTML += '<p>' + msg + '</p>';
+        }
+
+        const gl = document.createElement('canvas').getContext('webgl');
+        const maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+        const maxRenderbufferSize = gl.getParameter(gl.MAX_RENDERBUFFER_SIZE);
+        console.log('max texture size:', maxTextureSize);
+        console.log('max renderbuffer size:', maxRenderbufferSize);
+
+        log(`max texture size: ${maxTextureSize}`)
+        log(`max renderbuffer size: ${maxRenderbufferSize}`)
+
+        const tex = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(
+            gl.TEXTURE_2D,
+            0,
+            gl.RGBA,
+            maxTextureSize,
+            1,
+            0,
+            gl.RGBA,
+            gl.UNSIGNED_BYTE,
+            null);
+        gl.generateMipmap(gl.TEXTURE_2D);
+        console.log('GL ERROR:', glEnumToString(gl, gl.getError()));
+
+        log(`GL ERROR: ${glEnumToString(gl, gl.getError())}`)
+
+        function glEnumToString(gl, value) {
+            const keys = [];
+            for (const key in gl) {
+                if (gl[key] === value) {
+                    keys.push(key);
+                }
+            }
+            return keys.length ? keys.join(' | ') : `0x${value.toString(16)}`;
+        }
+    </script>
+
+</body>
+
+</html>

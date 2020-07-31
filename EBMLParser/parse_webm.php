@@ -179,14 +179,14 @@ class parser
 
 $f = "/Users/admin/Downloads/249.webm";
 
-$offset = 259;
-$maxlen = 286;
+// $offset = 259;
+// $maxlen = 286;
 
-$data = file_get_contents($f, false, null, $offset, $maxlen);
+// $data = file_get_contents($f, false, null, $offset, $maxlen);
 
-$data = file_get_contents('/tmp/12');
+$data = file_get_contents('/tmp/1.ts');
 
-var_dump(strlen($data), md5_file($f),  md5($data));
+var_dump(strlen($data),  md5($data));
 
 $parser = new parser($data);
 

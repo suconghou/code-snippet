@@ -1,0 +1,13 @@
+# cat 1.txt | vegeta attack -name=5qps -rate=5 -duration=5s > results.5qps.bin
+# cat 1.txt | vegeta attack -duration=15s -rate=5 | vegeta report
+
+
+
+GET http://127.0.0.1:3012/beta/live/news/27300/intro
+GET http://127.0.0.1:3012/beta/live/news/26720/comment
+GET http://127.0.0.1:3012/beta/live/news/26971/comment
+GET http://127.0.0.1:3012/beta/live/news/26494
+GET http://127.0.0.1:3012/beta/live/news/26578
+
+
+

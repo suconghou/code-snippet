@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="m3u8/mp4 video -> Cancas -> PIXI">
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width">
+<title>浏览器特性测试</title>
+<style id="jsbin-css">
+    span {
+      color: #888;
+    }
+
+    video {
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+<span><a href="?mp4">使用mp4</a></span><br>
+<span><a href="?m3u8">使用m3u8</a></span><br>
+<br>
+<span>复制 debugmm.qq.com/?forcex5=true 到聊天框并点击 开启支持</a></span><br>
+<span>复制 debugmm.qq.com/?forcex5=false 到聊天框并点击 关闭支持</a></span><br>
+<br>
+<br>
+<span>Video</span><br>
+<video crossorigin="anonymous" x5-video-player-type="h5-page" playsinline controls id="video">
+</video>
+<br />
+<span>Canvas</span><br>
+<canvas id="canvas" width="800" height="600"></canvas>
+<br>
+<span>PIXI</span><br>
+<script src="https://lib.baomitu.com/hls.js/8.0.0-beta.3/hls.min.js"></script>
+<script src='https://lib.baomitu.com/pixi.js/5.0.4/pixi.min.js'></script>
+<script>
+    const m3u8 = 'http://play-bc.ourwill.cn/live/twbeta-31201-3debf50dd4c94302865f97ebcccc97dd.m3u8?txSecret=6f6f9db68abc4a990d52bb23e196bad1&txTime=5F2BB8D5'
+    const mp4 = 'http://play-bc.ourwill.cn/live/twbeta-31201-3debf50dd4c94302865f97ebcccc97dd.m3u8?txSecret=6f6f9db68abc4a990d52bb23e196bad1&txTime=5F2BB8D5'; //"https://cdn.ourwill.cn/temp/vr/L2_jpzbnde7lzbq1boy.mp4";
+
+    const mp = location.search.indexOf("mp4") > -1
+
+    const videoSrc = mp ? mp4 : m3u8
+
+    // canvas
+    const canvas = document.getElementById("canvas")
+    const context = canvas.getContext("2d")
+    const cw = Math.floor(canvas.clientWidth / 2)
+    const ch = Math.floor(canvas.clientHeight / 2)
+    canvas.width = cw
+    canvas.height = ch
+
+    // PIXI
+    let app = new PIXI.Application({
+      width: cw,
+      height: ch,
+      transparent: true
+    });
+    document.body.appendChild(app.view)
+
+
+    // <video>
+    const video = document.getElementById("video");
+    video.muted = true;
+    video.addEventListener('play', () => {
+      draw(video, context, cw, ch)
+    })
+
+    if (mp) {
+      video.src = videoSrc
+
+    } else {
+      var hls = new Hls();
+      hls.attachMedia(video);
+      console.info(Hls.isSupported())
+      hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+        console.log("video and hls.js are now bound together !");
+        hls.loadSource(m3u8);
+        hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+          console.log("manifest loaded, found " + data.levels.length + " quality level");
+        });
+      });
+    }
+
+
+
+
+    // video -> canvas
+    const draw = (video, context, w, h) => {
+      if (video.paused || video.ended) return false
+      context.drawImage(video, 0, 0, w, h)
+      setTimeout(draw, 20, video, context, w, h)
+
+      // update pixi
+      videoSprite.texture.update()
+    }
+
+    // canvas -> PIXI
+    let videoSprite = new PIXI.Sprite(PIXI.Texture.from(canvas));
+    videoSprite.width = cw;
+    videoSprite.height = ch;
+    app.stage.addChild(videoSprite);
+  </script>
+</body>
+</html>

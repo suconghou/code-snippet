@@ -72,6 +72,7 @@ Igbinary is best
 
 > Json decode is slower than Serialize
 
+`json` `serialize` `export` 三者相比较,大数据量(500kb+)解码数据,serialize最具优势
 
 # gzip 后的比较
 

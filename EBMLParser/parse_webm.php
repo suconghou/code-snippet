@@ -177,14 +177,14 @@ class parser
 
 
 
-$f = "/Users/admin/Downloads/249.webm";
+$f = "/tmp/220-4622.ts";
 
-// $offset = 259;
-// $maxlen = 286;
+$offset = 219;
+$maxlen = 1009;
 
 // $data = file_get_contents($f, false, null, $offset, $maxlen);
 
-$data = file_get_contents('/tmp/1.ts');
+$data = file_get_contents($f);
 
 var_dump(strlen($data),  md5($data));
 

@@ -59,3 +59,4 @@ var_dump(filter_var('5', FILTER_VALIDATE_INT));
 var_dump(filter_var('5.0', FILTER_VALIDATE_INT));
 var_dump(filter_var('.5', FILTER_VALIDATE_INT));
 var_dump(filter_var('5.', FILTER_VALIDATE_INT));
+var_dump(filter_var('05', FILTER_VALIDATE_INT));

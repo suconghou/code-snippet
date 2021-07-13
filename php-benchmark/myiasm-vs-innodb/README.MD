@@ -50,13 +50,15 @@ sqlite : insert 0.051241 , select 0.023352 , update 0.044922, delete 0.044684
 
 `PRAGMA LOCKING_MODE=EXCLUSIVE` 模式更能大幅提高`sqlite`整体性能
 
+https://phiresky.github.io/blog/2020/sqlite-performance-tuning/
+
+
 ```
 test_1 : insert 0.120191 , select 0.232615 , update 0.156415, delete 0.168097
 test_2 : insert 4.186871 , select 0.256714 , update 4.610582, delete 4.275338
 test_3 : insert 0.076355 , select 0.240730 , update 0.121399, delete 0.105168
 sqlite : insert 0.022969 , select 0.008269 , update 0.017206, delete 0.016815
 ```
-
 
 
 考虑到`memory`引擎存在表大小限制,且是非持久化的,用`myiasm`更划算

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.ourwill.cn/fed-static/assets/libs/system-amd-use-default-6.11.0.min.js"></script>
+</head>
+
+<body>
+    <script>
+        System.import("https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js").then(res => {
+            console.info(res)
+            a = res
+            const key = res.enc.Utf8.parse('1234567890123456');
+            var encrypted = res.AES.encrypt("hi", key, {
+                mode: res.mode.CFB,
+                padding: res.pad.NoPadding,
+                iv:key
+            });
+            b = encrypted
+        })
+    </script>
+</body>
+
+</html>

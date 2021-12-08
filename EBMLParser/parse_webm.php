@@ -5,8 +5,12 @@
 class EBMLParser
 {
     public static $map = [
-        // '1a45dfa3' => ['EBML', 'm'],
-        // '4286' => ['EBMLVersion', 'u'],
+        '1a45dfa3' => ['EBML', 'm'],
+        '18538067' => ['Segment', 'm'],
+        '1f43b675' => ['Cluster', 'm'],
+        '114d9b74' => ['SeekHead', 'm'],
+        '4286' => ['EBMLVersion', 'u'],
+        'a3' => ['SimpleBlock', 'b'],
         '1c53bb6b' => ['Cues', 'm'],  // lvl. 1
         'bb' => ['CuePoint', 'm'],      // lvl. 2
         'b3' => ['CueTime', 'u'],    // lvl. 3
@@ -26,6 +30,8 @@ class EBMLParser
 
 class EBMLParserBuffer
 {
+    public string $data;
+    public int $index;
     function __construct(string $data)
     {
         $this->data = $data;
@@ -109,11 +115,11 @@ class EBMLParserBuffer
 
 class EBMLParserElement
 {
-    public $id;
-    private $type;
+    private string $id;
+    private string $type;
 
-    private $children = [];
-    private $buffer;
+    private array $children = [];
+    private EBMLParserBuffer $buffer;
 
 
     function __construct(string $buffer)
@@ -124,19 +130,22 @@ class EBMLParserElement
     function parseElements()
     {
         while ($item = $this->buffer->parse()) {
-            ['id' => $id, 'data' => $data] = $item;
-            $this->children[] = $this->parseElement($id, $data);
+            ['id' => $id, 'length' => $length, 'data' => $data] = $item;
+            $this->children[] = $this->parseElement($id, $length, $data);
         }
         return $this->children;
     }
 
-    function parseElement(string $id, string $data)
+    function parseElement(string $id, int $length, string $data)
     {
         $element = new EBMLParserElement($data);
         $element->id = $id;
+        $element->length = $length;
         [$element->name, $element->type] = EBMLParser::info($id);
         if ($element->type == 'm') {
             $element->parseElements();
+        } else if ($element->type == 'b') {
+            $element->value = bin2hex($data);
         } else {
             $element->value = base_convert(bin2hex($data), 16, 10);
         }
@@ -147,7 +156,8 @@ class EBMLParserElement
     {
         $data = [
             'id' => $this->id,
-            'name' =>  $this->name,
+            'name' => $this->name,
+            'length' => $this->length,
             'type' =>  $this->type,
         ];
         if ($this->children) {
@@ -171,13 +181,13 @@ class parser
     {
         $a = new EBMLParserElement($this->data);
         $data = $a->parseElements();
-        print_r($data);
+        return $data;
     }
 }
 
 
 
-$f = "/tmp/220-4622.ts";
+$f = "/tmp/243.webm";
 
 $offset = 219;
 $maxlen = 1009;
@@ -186,8 +196,8 @@ $maxlen = 1009;
 
 $data = file_get_contents($f);
 
-var_dump(strlen($data),  md5($data));
+// var_dump(strlen($data),  md5($data));
 
 $parser = new parser($data);
-
-var_dump($parser->parse());
+$res = $parser->parse();
+print_r($res);

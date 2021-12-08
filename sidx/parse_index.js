@@ -40,12 +40,13 @@ function byteToString(uint8Arr) {
 // 传入的是一个dataview
 function parse_js(data) {
     // 8字节的header,前4字节是size,后4字节是type
-    // 如果size是1，后面8字节作为size（应该是特大文件才会出现的状况，我们先不考虑）
+    // 如果size是1，后面8字节作为size
     const infos = [];
     let pos = 0;
     // 即使文件截断，只需要前一部分，我们也能分析出想要的结果
     while (pos < data.byteLength) {
-        const size = data.getUint32(pos)
+        let headerSize = 8;
+        let size = data.getUint32(pos)
         pos += 4
         if (pos >= data.byteLength) {
             break
@@ -55,9 +56,15 @@ function parse_js(data) {
         if (pos >= data.byteLength) {
             break
         }
+        if (size == 1) {
+            // 如果size是1，后面的8字节作为size
+            headerSize += 8
+            size = Number(data.getBigUint64(pos))
+            pos += 8
+        }
         const typeStr = byteToString(intTobytes(type))
         infos.push({ type: typeStr, size })
-        pos += size - 8; // size 是包含头部大小的，所有下一个atom的开始位置是这样计算
+        pos += size - headerSize; // size 是包含头部大小的，所有下一个atom的开始位置是这样计算
         if (pos >= data.byteLength) {
             break
         }

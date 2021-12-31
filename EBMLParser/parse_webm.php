@@ -8,6 +8,9 @@ class EBMLParser
         '1a45dfa3' => ['EBML', 'm'],
         '18538067' => ['Segment', 'm'],
         '1f43b675' => ['Cluster', 'm'],
+        '1654ae6b' => ['Tracks', 'm'],
+        '1254c367' => ['Tags', 'm'],
+        '7373' => ['Tag', 'm'],
         '114d9b74' => ['SeekHead', 'm'],
         '4286' => ['EBMLVersion', 'u'],
         'a3' => ['SimpleBlock', 'b'],
@@ -56,9 +59,9 @@ class EBMLParserBuffer
      * vint 解析
      * 先读一字节,判断此字节的前多少bit位是0 => VINT_WIDTH
      * VINT_WIDTH+1表示对应的vint占用的字节数目 => 即得出id
-     * 下面分析length 和 value 
+     * 下面分析length 和 value
      * 再读一字节
-     * 
+     *
      */
     function readVint()
     {
@@ -187,7 +190,7 @@ class parser
 
 
 
-$f = "/tmp/243.webm";
+$f = "/tmp/a.webm";
 
 $offset = 219;
 $maxlen = 1009;

@@ -16,6 +16,12 @@ https://github.com/cellar-wg/ebml-specification/blob/master/specification.markdo
 https://www.webmproject.org/docs/container/
 
 
+如果解析报错，可能是有些结构未识别，可以参考，添加类型map
 
 https://gist.github.com/OllieJones/2fef95b433fc442babdc6627e06085a4
+
+
+如果分析大文件，可修改内存限制
+
+php -d memory_limit=512M parse_webm.php > /tmp/1.txt
 

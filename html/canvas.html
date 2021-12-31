@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+    <style>
+
+        *{
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+<body>
+
+    <input type="button" value="Hello world!">
+    <canvas id="myCanvas" width="400" height="300"
+        style="border:1px solid #c3c3c3;position:absolute;left:2px;pointer-events:none">
+        Your browser does not support the canvas element.
+    </canvas>
+
+    <script type="text/javascript">
+
+        var c = document.getElementById("myCanvas");
+        var cxt = c.getContext("2d");
+        var img = new Image()
+        img.src = "https://cdn.ourwill.cn/tuwen/website/2019/v1/images/home_introNum2.png"
+        img.onload = () => {
+            cxt.drawImage(img, 0, 0);
+        }
+
+    </script>
+
+</body>
+
+</html>

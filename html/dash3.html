@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASH</title>
+
+    <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
+    <script src="//cdn.dashjs.org/latest/dash.all.debug.js"></script>
+    <script src="https://npmcdn.com/videojs-contrib-dash@^2.4.0/dist/videojs-dash.js"></script>
+
+</head>
+
+<body>
+    <video id="my-player" class="video-js" controls preload="auto" poster="//vjs.zencdn.net/v/oceans.png"></video>
+    <script>
+        var player = videojs('my-player');
+
+        player.ready(function () {
+            player.src({
+                src: 'http://127.0.0.1:6060/video/-biOGdYiF-I.mpd',
+                type: 'application/dash+xml'
+            });
+
+            player.play();
+        });
+    </script>
+</body>
+
+</html>

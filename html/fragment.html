@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://unpkg.com/mp4box@0.4.9/dist/mp4box.all.min.js"></script>
+    <script>
+        var mp4boxfile = MP4Box.createFile();
+
+        mp4boxfile.onError = function (e) { console.info(e) };
+        mp4boxfile.onReady = function (info) {
+            console.info(info)
+            mp4boxfile.onSegment = function (id, user, buffer, sampleNumber, last) {
+                console.info(id, user, buffer, sampleNumber, last)
+            }
+            mp4boxfile.setSegmentOptions(info.tracks[0].id, 'u1',{nbSamples:200});
+            var initSegs = mp4boxfile.initializeSegmentation();
+            console.info(initSegs)
+            mp4boxfile.start();
+        };
+        fetch('http://127.0.0.1:8877/9drLLoyt_bc.mp4', { headers: { range: 'bytes=0-1048576' } }).then(res => res.arrayBuffer()).then(buf => {
+            buf.fileStart = 0
+            mp4boxfile.appendBuffer(buf);
+            mp4boxfile.flush();
+
+            (async () => {
+                const r = await fetch('http://127.0.0.1:8877/9drLLoyt_bc.mp4', { headers: { range: 'bytes=1048577-3048577' } })
+                const ar = await r.arrayBuffer();
+                ar.fileStart = 1048577
+                mp4boxfile.appendBuffer(ar);
+                mp4boxfile.flush();
+            })()
+
+        })
+    </script>
+</body>
+
+</html>

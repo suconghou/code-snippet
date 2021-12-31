@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+    <head>
+        <title>player sample</title>
+        <style>
+            video {
+                width:800px;                
+            }
+        </style>
+    </head>
+    <body>
+        <div id="CJ-player-container">
+          <video id="CJ-video" preload="auto"><video>
+        </div>
+        <script src="https://unpkg.com/dash-player/dist/player.js"></script>
+        <script>
+            var player = new MediaPlayer({
+                // src: "http://yangchaojie.top/allow_origin/mpd/index.mpd",
+                src:"http://127.0.0.1:54917/cUsQKHVWbuM.mpd",
+                rootEle: '#CJ-player-container',
+                videoEle: '#CJ-video',
+                autoplay: true,                
+                loop: true
+            })
+            player.once('canPlay', function () {
+                console.log('ready')
+                // *.addEventListener('click',function(){
+                //     player.play()
+                //     player.pause()
+                //     // to 60s
+                //     player.setSeek(60)
+                //     // choose quality 
+                //     player.setQuality('video', **, function () {
+                //          console.log('画质切换完成')
+                //     }, 'immediately')
+                // })
+                // var cancelEvent_1 = player.listener("timeUpdated", function () {
+                //     console.log('timeUpdated')
+                //     player.formatTime.current
+                //     player.formatTime.duration                    
+                // })
+            })
+        </script>
+    </body>
+</html>

@@ -49,4 +49,9 @@ void main() {
 看到这里是不是觉得着色器语言似曾相识？学过C或C++的同学都能看出来了吧，着色器语言与C是多么的相像，但它们之间还是存在差异的，这里不赘述。所以如果你熟悉C，那么就会比较好理解GLSL ES。下面进行着色器一些变量的定义和语法讲述。
 
 
+兼容代码
 
+```
+var canvas = document.getElementById("glcanvas");
+gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+```

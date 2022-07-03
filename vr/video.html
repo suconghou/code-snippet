@@ -1,84 +1,115 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta name="description" content="m3u8/mp4 video -> Cancas -> PIXI">
-<meta charset="utf-8">
-<meta name="robots" content="noindex">
-<meta name="viewport" content="width=device-width">
-<title>浏览器特性测试</title>
-<style id="jsbin-css">
-  span{
-  color:#888;
-}
-video{
-  height : 200px;
-}
-</style>
+  <meta name="description" content="m3u8/mp4 video -> Cancas -> PIXI">
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width">
+  <title>浏览器特性测试</title>
+  <style id="jsbin-css">
+    span {
+      color: #888;
+    }
+
+    video {
+      height: 200px;
+    }
+  </style>
 </head>
+
 <body>
-<span><a href="?mp4">使用mp4</a></span><br>
-<span><a href="?m3u8">使用m3u8</a></span><br>
-<br>
-<span>复制 debugmm.qq.com/?forcex5=true 到聊天框并点击 开启支持</a></span><br>
-<span>复制 debugmm.qq.com/?forcex5=false 到聊天框并点击 关闭支持</a></span><br>
-<br>
-<br>
-<span>Video</span><br>
-<video crossorigin="anonymous" x5-video-player-type="h5-page" playsinline controls id="video">
-</video>
-<br/>
-<span>Canvas</span><br>
-<canvas id="canvas" width="800" height="600"></canvas>
-<br>
-<span>PIXI</span><br>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.0.4/pixi.js'></script>
-<script>
-const m3u8 = 'https://media.ourwill.cn/production/b50403c0c56d4b87834ae2cc8ce89e6e/transcode_1548317288784/clip_58qd9ri83fhvsbiw.m3u8'
-const mp4 = "https://cdn.ourwill.cn/temp/vr/L2_jpzbnde7lzbq1boy.mp4";
+  <span><a href="?mp4">使用mp4</a></span><br>
+  <span><a href="?m3u8">使用m3u8</a></span><br>
+  <br>
+  <span>复制 debugmm.qq.com/?forcex5=true 到聊天框并点击 开启支持</a></span><br>
+  <span>复制 debugmm.qq.com/?forcex5=false 到聊天框并点击 关闭支持</a></span><br>
+  <br>
+  <br>
+  <span>Video</span><br>
+  <video crossorigin="anonymous" rendered="standard" x5-video-player-type="h5-page" playsinline controls id="video" class="js-video">
+  </video>
+  <br />
+  <span>Canvas</span><br>
+  <canvas id="canvas" width="800" height="600"></canvas>
+  <br>
+  <span>PIXI</span><br>
+  <br />
 
-const videoSrc = location.search.indexOf("mp4")>-1 ? mp4:m3u8
+  </div>
 
-// canvas
-const canvas = document.getElementById("canvas")
-const context = canvas.getContext("2d")
-const cw = Math.floor(canvas.clientWidth / 2)
-const ch = Math.floor(canvas.clientHeight / 2)
-canvas.width = cw
-canvas.height = ch
+  <script src='https://lib.baomitu.com/pixi.js/5.2.1/pixi.min.js'></script>
 
-// PIXI
-let app = new PIXI.Application({
-  width: cw,
-  height: ch,
-  transparent: true
-});
-document.body.appendChild(app.view)
+  <script>
+    const m3u8 = 'https://wshlslive.migucloud.com/live/OXSSOVIH_C0/playlist.m3u8'
+    const mp4 = "https://vod.ourwill.cn/6c980293vodcq1500001190/e1b875ae387702300856507741/f0.mp4";
+
+    const videoSrc = location.search.indexOf("mp4") > -1 ? mp4 : m3u8
+
+    // canvas
+    const canvas = document.getElementById("canvas")
+    const context = canvas.getContext("2d")
+    let cw, ch;
 
 
-// <video>
-const video = document.getElementById("video");
-video.muted = true;
-video.src = videoSrc
-video.addEventListener('play', () => {
-  draw(video, context, cw, ch)
-})
 
-// video -> canvas
-const draw = (video, context, w, h) => {
-  if (video.paused || video.ended) return false
-  context.drawImage(video, 0, 0, w, h)
-  setTimeout(draw, 20, video, context, w, h)
 
-  // update pixi
-  videoSprite.texture.update()
-}
+    // <video>
+    const video = document.getElementById("video");
+    video.muted = true;
+    video.src = videoSrc
+    video.oncanplay = () => {
+      video.play();
+      setTimeout(() => draw(), 500)
 
-// canvas -> PIXI
-let videoSprite = new PIXI.Sprite(PIXI.Texture.from(canvas));
-videoSprite.width = cw;
-videoSprite.height = ch;
-app.stage.addChild(videoSprite);
-</script>
+      cw = video.videoWidth;
+      ch = video.videoHeight
+      console.info(video.videoWidth, video.videoHeight)
+      canvas.width = cw
+      canvas.height = ch
+      console.info(cw, ch)
+
+      // canvas -> PIXI
+      // PIXI
+      let app = new PIXI.Application({
+        width: cw,
+        height: ch,
+        transparent: true
+      });
+      document.body.appendChild(app.view)
+      const videoSprite = new PIXI.Sprite(PIXI.Texture.from(canvas));
+      videoSprite.width = cw;
+      videoSprite.height = ch;
+      app.stage.addChild(videoSprite);
+
+      const draw = () => {
+        console.info('draw')
+        context.drawImage(video, 0, 0, cw, ch)
+        // update pixi
+        videoSprite.texture.update()
+        setTimeout(() => draw(), 100)
+      }
+
+    }
+
+    const c = document.createElement('canvas')
+    c.width=1000;
+    c.height=1000;
+    const ctx = c.getContext('2d')
+    const vv = document.querySelector('video')
+    ctx.drawImage(vv,0,0,1000,1000)
+    document.body.appendChild(c)
+
+
+    // video -> canvas
+
+
+
+
+  </script>
+
+
+
 </body>
+
 </html>

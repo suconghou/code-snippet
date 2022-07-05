@@ -38,8 +38,8 @@ export const fnv1a32 = (str: string): number => {
     const bytes = (new TextEncoder()).encode(str)
     for (let index = 0; index < bytes.length; index++) {
         const characterCode = bytes[index];
-        hash ^= characterCode;
-        hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+        hash = (hash ^ characterCode) >>> 0; // 每一步的结果都要转化为 uint32
+        hash = (hash + (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24)) >>> 0; // 使用加法而不是乘法才没问题
     }
     return hash;
 }

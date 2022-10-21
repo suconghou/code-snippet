@@ -2,7 +2,7 @@
 
 gd 库中的
 
-`getimagesize` 不仅可以取得类型，还能取得图片大小等信息
+`getimagesize` 不仅可以取得类型，还能取得图片大小等信息, 此函数并不依赖gd扩展
 
 `list($width, $height, $type, $attr) = getimagesize("img/flag.jpg");`
 

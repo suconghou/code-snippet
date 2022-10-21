@@ -109,8 +109,10 @@ Igbinary is best
 
 `json+gz` 在1000字节以上就能压缩为原来的三分之一
 
+https://www.lucidchart.com/techblog/2019/12/06/json-compression-alternative-binary-formats-and-compression-methods/
 
 
+https://lobste.rs/s/5edgkf/i_made_jcof_object_notation_which_encodes#c_ndatwo
 
 
 

@@ -52,6 +52,31 @@ Msgpack Serialize: 0.13252782821655 Len: 10546.88KB
 Msgpack Unserialize: 0.39418792724609
 ```
 
+```
+PHP 8.1.12 (cli) (built: Oct 31 2022 03:52:43) (NTS)
+Copyright (c) The PHP Group
+Zend Engine v4.1.12, Copyright (c) Zend Technologies
+JSON Encode: 0.61169600486755 Len: 44921.88KB
+JSON Decode: 0.8013379573822
+Serialize: 1.0728449821472 Len: 49696.19KB
+Unserialize: 0.25303101539612
+Igbinary Serialize: 0.070091962814331 Len: 6707.73KB
+Igbinary Unserialize: 0.11166095733643
+Msgpack Serialize: 0.57288599014282 Len: 35156.25KB
+Msgpack Unserialize: 0.22970199584961
+
+
+JSON Encode: 0.24938297271729 Len: 17773.44KB
+JSON Decode: 0.51539397239685
+Serialize: 0.32315683364868 Len: 20008.69KB
+Unserialize: 0.19902491569519
+Igbinary Serialize: 0.013679027557373 Len: 1239KB
+Igbinary Unserialize: 0.032066106796265
+Msgpack Serialize: 0.3084180355072 Len: 10546.88KB
+Msgpack Unserialize: 0.20055103302002
+
+```
+
 ### Serialize Size
 
 Igbinary is best

@@ -34,9 +34,8 @@ async function handleRequest(request) {
     if (origin.port) {
         url.port = origin.port
     }
-    request.redirect = 'follow'
-    Object.assign(request.headers, origin.headers)
-    const res = await fetch(url.toString(), request)
+    const headers = new Headers([...request.headers.entries(), ...Object.entries(origin.headers || {})]);
+    const res = await fetch(url.toString(), { redirect: 'follow', headers })
     const response = new Response(res.body, res)
     response.headers.set("access-control-allow-origin", "*")
     return response

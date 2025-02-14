@@ -1,13 +1,13 @@
 
 const routes = [
     {
-        r: [/^\/recent\/?/],
+        r: [/\/v1beta\//],
         protocol: "https:",
         port: 443,
-        hostname: "v2ex.com",
+        hostname: "generativelanguage.googleapis.com",
     },
     {
-        r: [/^\/\w+\/\w+\/?/, /.*/],
+        r: [/\/releases\/download\//],
         protocol: "https:",
         port: 443,
         hostname: "github.com",
@@ -17,7 +17,21 @@ const routes = [
 
 async function handleRequest(request) {
     const url = new URL(request.url)
-    const origin = routes.find(item => item.r.some(regex => regex.test(url.pathname)));
+    let origin = routes.find(item => item.r.some(regex => regex.test(url.pathname)));
+    if (!origin) {
+        const a = url.pathname.split('/')
+        if (a.length < 3 || !/^([\w\-]+\.)+\w+$/.test(a[1])) {
+            return new Response("Not found", { status: 404 })
+        }
+        const h = a[1];
+        a.splice(1, 1);
+        url.pathname = a.join('/');
+        origin = {
+            hostname: h,
+            protocol: "https:",
+            port: 443,
+        }
+    }
     request.cf = {
         cacheEverything: true,
         cacheTtl: 60,
@@ -34,8 +48,12 @@ async function handleRequest(request) {
     if (origin.port) {
         url.port = origin.port
     }
-    request.redirect = 'follow'
-    return await fetch(url.toString(), request)
+    const headers = new Headers([...request.headers.entries(), ...Object.entries(origin.headers || {})]);
+    const res = await fetch(url.toString(), { redirect: 'follow', headers, method: request.method, body: request.body })
+    const response = new Response(res.body, res)
+    response.headers.set("access-control-allow-origin", "*")
+    return response
+
 }
 
 

@@ -7,6 +7,12 @@ const routes = [
         hostname: "generativelanguage.googleapis.com",
     },
     {
+        r: [/^\/b-hls/],
+        protocol: "https:",
+        port: 443,
+        hostname: "media-hls.growcdnssedge.com",
+    },
+    {
         r: [/\/releases\/download\//],
         protocol: "https:",
         port: 443,
@@ -34,7 +40,7 @@ async function handleRequest(request) {
     }
     request.cf = {
         cacheEverything: true,
-        cacheTtl: 60,
+        cacheTtl: 1,
         minify: {
             javascript: true,
             css: true,
@@ -57,8 +63,10 @@ async function handleRequest(request) {
 }
 
 
-addEventListener('fetch', event => {
-    event.respondWith(handleRequest(event.request));
-})
+export default {
+  async fetch(request, env, ctx) {
+    return handleRequest(request);
+  }
+}
 
 

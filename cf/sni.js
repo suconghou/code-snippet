@@ -3,13 +3,13 @@ const routes = [
     {
         r: [/gemini.suconghou.cn/],
         protocol: "https:",
-        port: 443,
+        port: "443",
         hostname: "generativelanguage.googleapis.com",
     },
     {
         r: [/.*/],
         protocol: "https:",
-        port: 443,
+        port: "443",
         hostname: "github.com",
     },
 ];
@@ -18,15 +18,6 @@ const routes = [
 async function handleRequest(request) {
     const url = new URL(request.url)
     const origin = routes.find(item => item.r.some(regex => regex.test(url.hostname)));
-    request.cf = {
-        cacheEverything: true,
-        cacheTtl: 60,
-        minify: {
-            javascript: true,
-            css: true,
-            html: true
-        },
-    }
     url.hostname = origin.hostname
     if (origin.protocol) {
         url.protocol = origin.protocol
@@ -40,9 +31,9 @@ async function handleRequest(request) {
 
 
 export default {
-  async fetch(request, env, ctx) {
-    return handleRequest(request);
-  }
+    async fetch(request, env, ctx) {
+        return handleRequest(request);
+    }
 }
 
 
